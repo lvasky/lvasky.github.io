@@ -1,4 +1,4 @@
-I"<p>一个工作6年的 iOS SDK 开发者，在一家游戏公司做SDK开发和维护。</p>
+I"<p>一个工作6年的 iOS SDK 开发者，在一家游戏公司做SDK开发和维护。</p>
 
 <p>除了iOS技术，我还一直维护着这个博客，懂一些前端的基础知识。</p>
 
@@ -32,7 +32,7 @@
         this.page.url = "https://lvasky.ml/about/";
         this.page.identifier = "/about/";
     };
-    var disqus_shortname = 'leopard';
+    var disqus_shortname = 'lvasky';
     
     (function() { // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');

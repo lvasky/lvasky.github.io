@@ -1,9 +1,4 @@
----
-layout: page
-title: 技术支持 
----
-
-<!-- 博客源码在 <a target="_blank" href='https://github.com/leopardpan/leopardpan.github.io/'>Github</a> 上，你的 Star 是我更新的动力，谢谢~
+I"�	<!-- 博客源码在 <a target="_blank" href='https://github.com/leopardpan/leopardpan.github.io/'>Github</a> 上，你的 Star 是我更新的动力，谢谢~
 
 
 遇到问题请先自行排查，可以直接在[Issues](https://github.com/leopardpan/leopardpan.github.io/issues)里面提问，不过回复的可能不及时。
@@ -37,15 +32,12 @@ title: 技术支持
 
 如果有关于iOS的问题我们也可以一起讨论 -->
 
+<h3> 感谢您的打赏 </h3>
 
-<h3> 感谢您的打赏 </h3> 
+<p> <img src="/images/payimg/alipayimg.jpg" width="200x200" /> </p>
 
-<p> <img src="/images/payimg/alipayimg.jpg" width="200x200" > </p>
+<p> <img src="/images/payimg/weipayimg.jpg" width="200x200" /> </p>
 
-<p> <img src="/images/payimg/weipayimg.jpg" width="200x200"> </p>
-
-
-    
 <h3> 如何联系到我 </h3>
 
 <p> 
@@ -54,5 +46,31 @@ email：1254632021@qq.com
 qq: 1254632021     
 <p> 
 
-{% include comments.html %}
+<section class="post-comments">
 
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "https://lvasky.ml/support/";
+        this.page.identifier = "/support/";
+    };
+    var disqus_shortname = 'lvasky';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+
+</section>
+
+
+</p></p></p>
+:ET

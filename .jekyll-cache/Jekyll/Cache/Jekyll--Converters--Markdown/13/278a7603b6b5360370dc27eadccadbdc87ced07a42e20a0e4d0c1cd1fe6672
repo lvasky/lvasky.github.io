@@ -1,4 +1,4 @@
-I"�	<!-- 博客源码在 <a target="_blank" href='https://github.com/leopardpan/leopardpan.github.io/'>Github</a> 上，你的 Star 是我更新的动力，谢谢~
+I"�	<!-- 博客源码在 <a target="_blank" href='https://github.com/leopardpan/leopardpan.github.io/'>Github</a> 上，你的 Star 是我更新的动力，谢谢~
 
 
 遇到问题请先自行排查，可以直接在[Issues](https://github.com/leopardpan/leopardpan.github.io/issues)里面提问，不过回复的可能不及时。
@@ -48,26 +48,24 @@ qq: 1254632021
 
 <section class="post-comments">
 
-  
-    <div id="disqus_thread"></div>
-    <script>
+  <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC81MzgzMi8zMDMwNQ==">
+    <script type="text/javascript">
+       (function(d, s) {
+           var j, e = d.getElementsByTagName(s)[0];
     
-    var disqus_config = function () {
-        this.page.url = "https://lvasky.ml/support/";
-        this.page.identifier = "/support/";
-    };
-    var disqus_shortname = 'lvasky';
+           if (typeof LivereTower === 'function') { return; }
     
-    (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
+           j = d.createElement(s);
+           j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+           j.async = true;
+    
+           e.parentNode.insertBefore(j, e);
+       })(document, 'script');
     </script>
-    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
-    
-  
+    <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+    <!-- City版安装代码已完成 -->
 
 </section>
 

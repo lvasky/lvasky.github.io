@@ -1,7 +1,0 @@
-I"�<h3 id="问题一--could-not-find-gem-redcarpet-in-locally-installed-gems">问题一  “Could not find gem ‘redcarpet’ in locally installed gems”</h3>
-<blockquote>
-  <p>1.bundle install</p>
-
-  <p>2.bundle exec jekyll serve</p>
-</blockquote>
-:ET

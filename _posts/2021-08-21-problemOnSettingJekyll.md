@@ -2,7 +2,7 @@
 layout: post
 title: 搭建jekyll时遇到的问题
 date: 2021-08-21 
-tags: Problems
+tags: Problem
 
 ---
 

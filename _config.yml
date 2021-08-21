@@ -1,7 +1,7 @@
 # Basic
 title: lvasky
 subtitle: 个人站
-description: 欢迎来到我的个人站~
+description: 世界上只有一种真正的英雄主义,那就是看清生活的真相之后,依然热爱生活
 # 头像里面的标题
 avatarTitle: 快乐生活每一天
 # 头像里面的描述
@@ -13,8 +13,8 @@ enableToc: true
 
 # Comment
 comment:
-    # livere: MTAyMC81MDk5NC8yNzQ3Ng  # https://www.livere.com
-    disqus: lvasky
+     livere: MTAyMC81MzgzMi8zMDMwNQ  # https://www.livere.com
+    #disqus: lvasky
     # uyan: 2143225  # 有言id,登录有言官网申请
 
 # Social

@@ -1,16 +1,0 @@
-I"<h1 id="问题一--how-to-install-jekyll-new-windows10">问题一  how to install jekyll (new windows10)</h1>
-
-<blockquote>
-  <p>1.download <a href="https://rubyinstaller.org/downloads/">rubyinstaller-devkit-2.6.2-1-x64.exe</a></p>
-
-  <p>2.gem install jekyll bundler</p>
-</blockquote>
-
-<h1 id="问题二--could-not-find-gem-redcarpet-in-locally-installed-gems">问题二  “Could not find gem ‘redcarpet’ in locally installed gems”</h1>
-
-<blockquote>
-  <p>1.bundle install</p>
-
-  <p>2.jekyll server</p>
-</blockquote>
-:ET

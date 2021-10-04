@@ -2,7 +2,7 @@
 layout: post
 title: 对美国消费者信贷数据拆分后的观察和思考 - 付鹏的财经世界
 date: 2021-08-22 
-tags: Capital
+tags: 金融
 ---
 
 # 正文

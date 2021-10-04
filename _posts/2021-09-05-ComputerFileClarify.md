@@ -2,7 +2,7 @@
 layout: post
 title: 读取.c文件和普通文本文件的区别
 date: 2021-09-05
-tags: Computer Knowledge
+tags: 技术
 
 ---
 

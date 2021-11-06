@@ -1,0 +1,24 @@
+I"b<h1 id="问题一--how-to-install-jekyll-new-windows10">问题一  how to install jekyll (new windows10)</h1>
+
+<blockquote>
+  <p>1.download <a href="https://rubyinstaller.org/downloads/">rubyinstaller-devkit-2.6.2-1-x64.exe</a></p>
+
+  <p>2.gem install jekyll bundler</p>
+</blockquote>
+
+<h1 id="问题二--could-not-find-gem-redcarpet-in-locally-installed-gems">问题二  “Could not find gem ‘redcarpet’ in locally installed gems”</h1>
+
+<blockquote>
+  <p>1.bundle install</p>
+
+  <p>2.jekyll server</p>
+</blockquote>
+
+<h1 id="问题三-翻墙才能打开网站不翻墙打不开原域名lvaskygithubio能打开">问题三 翻墙才能打开网站，不翻墙打不开，原域名lvasky.github.io能打开</h1>
+
+<blockquote>
+  <p>原因：dns被翻墙软件污染了。</p>
+
+  <p>办法：域名更改成8.8.8.8，然后再改回来就好了</p>
+</blockquote>
+:ET

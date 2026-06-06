@@ -1,34 +1,698 @@
----
-layout: default
----
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="吕硕聪 - FPGA 工程师简历网站：6年FPGA开发经验，覆盖LED显示控制、光纤高速信号处理、图像处理、以太网协议解析、资源和时序优化。" />
+    <title>吕硕聪 | FPGA 工程师</title>
+    <style>:root {
+  --bg: #f7f9f8;
+  --paper: #ffffff;
+  --ink: #10201d;
+  --muted: #66736f;
+  --line: #dbe4e0;
+  --line-strong: #b7c8c1;
+  --accent: #0b8f6a;
+  --accent-2: #19c28b;
+  --dark: #101a18;
+  --dark-2: #172421;
+  --dark-muted: #a9bbb4;
+  --shadow: 0 24px 70px rgba(16, 32, 29, 0.1);
+  font-family: Inter, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
 
-<div class="main-post-list hidden">
+* {
+  box-sizing: border-box;
+}
 
-  <ol class="post-list">
-    {% for post in paginator.posts %}
-    <li>
-      <h2 class="post-list__post-title post-title"><a href="{{ post.url }}" title="访问 {{ post.title }}">{{ post.title }}</a></h2>
-      <p class="excerpt">{{ post.content | strip_html | strip_newlines | truncate: 250 }}&hellip;</p>
-      <div class="post-list__meta">        
-        <time datetime="{{post.date | date: date_to_xmlschema}}" class="post-list__meta--date date">
-          <img src="/images/calendar.png" width="20px" /> 
-          {{ post.date | date: "%F"}}</time> 
-        <div class = "tag-img-icon">
-          <img src="/images/tag-icon.svg" width="20px" /> 
-        </div>
-        <a href="/tags">
-          <div class = "post-list-icon-mate">
-            <span class="post-list__meta--tags-right">{{ post.tags }}</span>
-          </div>
-          <div class = "post-list-small-mate">
-          <a class="btn-border-small" href={{ post.url }}>阅读全文 » </a>
-          </div>
-      </div>
-      <hr class="post-list__divider" />
-    </li>
-    {% endfor %}
-  </ol>
+html {
+  scroll-behavior: smooth;
+}
 
-  {% include pagination.html %}
+body {
+  margin: 0;
+  background:
+    linear-gradient(90deg, rgba(16, 32, 29, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(16, 32, 29, 0.035) 1px, transparent 1px),
+    var(--bg);
+  background-size: 36px 36px;
+}
 
-</div>
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 72px;
+  padding: 0 48px;
+  border-bottom: 1px solid rgba(219, 228, 224, 0.9);
+  background: rgba(247, 249, 248, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.brand,
+.header-action,
+.button,
+.identity-row span,
+.contact-card a,
+.contact-card span {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.brand {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--accent);
+  background: var(--paper);
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  font-size: 14px;
+  color: #42504c;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+
+.header-action {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--paper);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
+  gap: 56px;
+  align-items: center;
+  min-height: calc(100vh - 72px);
+  padding: 76px 8vw 52px;
+}
+
+.hero-copy {
+  max-width: 720px;
+}
+
+.identity-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.identity-row span {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.hero h1 {
+  font-size: clamp(58px, 8vw, 112px);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.role {
+  margin-top: 18px;
+  font-size: clamp(25px, 3vw, 42px);
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.hero-text {
+  max-width: 680px;
+  margin-top: 28px;
+  font-size: 18px;
+  line-height: 1.85;
+  color: #354440;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.button {
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.button.primary {
+  background: var(--dark);
+  color: #fff;
+}
+
+.button.secondary {
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+}
+
+.hero-diagram {
+  position: relative;
+  min-height: 520px;
+  padding: 26px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(11, 143, 106, 0.12), transparent 35%),
+    linear-gradient(var(--paper), #f3f8f5);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.diagram-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.chip {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(78%, 430px);
+  aspect-ratio: 1;
+  margin: 54px auto 0;
+  border: 2px solid #17342d;
+  border-radius: 12px;
+  background:
+    linear-gradient(90deg, rgba(16, 32, 29, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(16, 32, 29, 0.08) 1px, transparent 1px),
+    #eaf3ef;
+  background-size: 24px 24px;
+}
+
+.chip::before,
+.chip::after {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  border: 1px dashed rgba(11, 143, 106, 0.55);
+  border-radius: 16px;
+}
+
+.chip-core {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  width: 170px;
+  height: 150px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: 0 18px 50px rgba(16, 32, 29, 0.11);
+}
+
+.chip-core strong {
+  font-size: 36px;
+}
+
+.chip-core span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.pin {
+  position: absolute;
+  min-width: 88px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--dark);
+  color: #dff8ef;
+  text-align: center;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 12px;
+}
+
+.pin-a { left: -28px; top: 24%; }
+.pin-b { right: -22px; top: 32%; }
+.pin-c { left: 16%; bottom: -14px; }
+.pin-d { right: 16%; bottom: -14px; }
+
+.wave-lines {
+  display: grid;
+  gap: 14px;
+  margin-top: 54px;
+}
+
+.wave-lines span {
+  height: 18px;
+  background: repeating-linear-gradient(90deg, var(--accent), var(--accent) 34px, transparent 34px, transparent 58px);
+  clip-path: polygon(0 65%, 8% 65%, 8% 20%, 17% 20%, 17% 65%, 29% 65%, 29% 20%, 43% 20%, 43% 65%, 58% 65%, 58% 20%, 70% 20%, 70% 65%, 100% 65%, 100% 100%, 0 100%);
+  opacity: 0.8;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto 36px;
+  border: 1px solid var(--line);
+  background: var(--line);
+}
+
+.metric {
+  padding: 28px 26px;
+  background: var(--paper);
+}
+
+.metric strong {
+  display: block;
+  font-size: 38px;
+  line-height: 1;
+}
+
+.metric span {
+  display: block;
+  margin-top: 11px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.section {
+  padding: 86px 8vw;
+}
+
+.section-heading {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 640px) minmax(260px, 1fr);
+  gap: 34px;
+  align-items: start;
+  margin-bottom: 38px;
+}
+
+.section-heading p {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.section-heading h2 {
+  font-size: clamp(32px, 4vw, 54px);
+  line-height: 1.08;
+}
+
+.section-heading span {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.advantage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.advantage,
+.project-card,
+.timeline-card,
+.skill-card,
+.patents,
+.awards,
+.edu-card,
+.contact-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.advantage {
+  min-height: 170px;
+  padding: 20px;
+}
+
+.advantage svg {
+  color: var(--accent);
+}
+
+.advantage p {
+  margin-top: 18px;
+  color: #354440;
+  line-height: 1.72;
+}
+
+.project-list {
+  display: grid;
+  gap: 18px;
+}
+
+.project-card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  padding: 0;
+  overflow: hidden;
+}
+
+.project-index {
+  display: grid;
+  place-items: start center;
+  padding-top: 30px;
+  border-right: 1px solid var(--line);
+  color: var(--accent);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.project-body {
+  padding: 28px;
+}
+
+.project-head,
+.job-title,
+.patents h3,
+.awards h3 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.project-head h3,
+.timeline-card h3,
+.skill-card h3,
+.patents h3,
+.awards h3 {
+  font-size: 22px;
+}
+
+.project-head p,
+.timeline-card .job-title p {
+  margin-top: 7px;
+  color: var(--muted);
+}
+
+.project-summary,
+.company-intro {
+  margin-top: 18px;
+  color: #34413e;
+  line-height: 1.8;
+}
+
+.project-card ul,
+.timeline-card ul {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding-left: 20px;
+  color: #34413e;
+  line-height: 1.72;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 22px;
+}
+
+.stack span,
+.skill-card span {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f4f8f6;
+  color: #40504b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.experience {
+  background: linear-gradient(180deg, rgba(11, 143, 106, 0.07), rgba(11, 143, 106, 0));
+}
+
+.timeline {
+  position: relative;
+  display: grid;
+  gap: 20px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 24px;
+}
+
+.timeline-date {
+  padding-top: 20px;
+  color: var(--accent);
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-weight: 800;
+}
+
+.timeline-card {
+  padding: 26px;
+}
+
+.job-title {
+  justify-content: flex-start;
+}
+
+.section-dark {
+  background: var(--dark);
+  color: #eef8f4;
+}
+
+.section-dark .section-heading span,
+.section-dark .skill-card {
+  color: var(--dark-muted);
+}
+
+.section-dark .section-heading p {
+  color: var(--accent-2);
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.skill-card {
+  min-height: 230px;
+  padding: 22px;
+  background: var(--dark-2);
+  border-color: rgba(169, 187, 180, 0.18);
+}
+
+.skill-card h3 {
+  color: #fff;
+}
+
+.skill-card div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.skill-card span {
+  border-color: rgba(169, 187, 180, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #d7e6e0;
+}
+
+.honors-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 18px;
+}
+
+.patents,
+.awards {
+  padding: 26px;
+}
+
+.patents h3,
+.awards h3 {
+  justify-content: flex-start;
+}
+
+.patents ol {
+  display: grid;
+  gap: 13px;
+  margin: 22px 0 0;
+  padding-left: 24px;
+  line-height: 1.72;
+}
+
+.patents p {
+  margin-top: 18px;
+  color: var(--muted);
+}
+
+.awards {
+  display: grid;
+  gap: 16px;
+}
+
+.awards p {
+  display: flex;
+  gap: 10px;
+  color: #34413e;
+  line-height: 1.6;
+}
+
+.awards svg,
+.patents svg {
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+
+.contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  padding: 46px 8vw 60px;
+  background: var(--dark);
+  color: #fff;
+}
+
+.edu-card,
+.contact-card {
+  padding: 28px;
+  background: var(--dark-2);
+  border-color: rgba(169, 187, 180, 0.18);
+}
+
+.edu-card {
+  display: flex;
+  gap: 18px;
+}
+
+.edu-card p,
+.contact-card a,
+.contact-card span {
+  margin-top: 12px;
+  color: #d7e6e0;
+}
+
+.contact-card {
+  display: grid;
+  gap: 8px;
+}
+
+@media (max-width: 1080px) {
+  .hero,
+  .section-heading,
+  .contact {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: 0;
+  }
+
+  .advantage-grid,
+  .skill-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    padding: 0 18px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 54px 20px 28px;
+  }
+
+  .hero-diagram {
+    min-height: 380px;
+  }
+
+  .chip {
+    width: 86%;
+  }
+
+  .metrics,
+  .advantage-grid,
+  .skill-grid,
+  .honors-layout,
+  .timeline-item,
+  .project-card {
+    grid-template-columns: 1fr;
+  }
+
+  .project-index {
+    place-items: center start;
+    padding: 18px 22px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section {
+    padding: 64px 20px;
+  }
+
+  .section-heading {
+    gap: 16px;
+  }
+}
+</style>
+  </head>
+  <body>
+    <div id="root"><header class="site-header"><a class="brand" href="#top" aria-label="返回首页"><span class="brand-mark"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circuit-board"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M11 9h4a2 2 0 0 0 2-2V3"></path><circle cx="9" cy="9" r="2"></circle><path d="M7 21v-4a2 2 0 0 1 2-2h4"></path><circle cx="15" cy="15" r="2"></circle></svg></span><span>吕硕聪</span></a><nav class="nav-links" aria-label="主导航"><a href="#projects">项目</a><a href="#experience">经历</a><a href="#skills">技能</a><a href="#honors">专利荣誉</a></nav><a class="header-action" href="/resume-lvshuocong.docx"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-to-line"><path d="M12 17V3"></path><path d="m6 11 6 6 6-6"></path><path d="M19 21H5"></path></svg>下载简历</a></header><main><section class="hero" id="top"><div class="hero-copy"><div class="identity-row"><span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>上海</span><span>6年 FPGA 开发经验</span></div><h1>吕硕聪</h1><p class="role">FPGA 工程师</p><p class="hero-text">面向高可靠 LED 显示控制、光纤高速信号处理、图像处理与视频数据链路的 FPGA 工程师。主导过 3 款 FPGA 控制器开发，具备从架构设计、RTL 实现、仿真验证、资源/时序优化到产品交付维护的完整经验。</p><div class="hero-actions"><a class="button primary" href="#projects">查看项目<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="button secondary" href="/resume-lvshuocong.docx">下载 Word 简历<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-to-line"><path d="M12 17V3"></path><path d="m6 11 6 6 6-6"></path><path d="M19 21H5"></path></svg></a></div></div><div class="hero-diagram" aria-label="FPGA resume visual summary"><div class="diagram-top"><span>FPGA_SYSTEM</span><span>high reliability display control</span></div><div class="chip"><div class="chip-core"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cpu"><rect width="16" height="16" x="4" y="4" rx="2"></rect><rect width="6" height="6" x="9" y="9" rx="1"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg><strong>RTL</strong><span>Control / Video / Interface</span></div><div class="pin pin-a">Ethernet</div><div class="pin pin-b">DDR</div><div class="pin pin-c">SerDes</div><div class="pin pin-d">HDMI</div></div><div class="wave-lines"><span></span><span></span><span></span></div></div></section><section class="metrics" aria-label="简历关键数据"><div class="metric"><strong>6年</strong><span>FPGA 开发经验</span></div><div class="metric"><strong>100K+</strong><span>控制卡单品年销量</span></div><div class="metric"><strong>4项</strong><span>已公开/授权专利</span></div><div class="metric"><strong>3年</strong><span>连续获得公司最高奖金奖励</span></div></section><section class="section"><div class="section-heading"><p>个人优势</p><h2>覆盖完整 FPGA 产品开发链路</h2><span>以下能力和经历均来自原始简历 doc。</span></div><div class="advantage-grid"><article class="advantage"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><p>产品多应用于高可靠要求场景和标志性工程，其中 LED 屏控制卡年销量 100K 以上。</p></article><article class="advantage"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><p>扎实的数字电路设计基础，精通 FPGA 系统开发和设计全部流程，熟练掌握开发的设计方法和技术细节。</p></article><article class="advantage"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><p>掌握 Xilinx、Altera、安路、复旦微系列 FPGA 芯片架构、特性和设计方法。</p></article><article class="advantage"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><p>精通 Verilog、SystemVerilog，掌握 Python、C/C++、SpinalHDL，有良好的代码习惯。</p></article><article class="advantage"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><p>精通 ModelSim、Vivado Simulator、VCS、QuestaSim 等仿真工具。</p></article><article class="advantage"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><p>熟悉 TCP/UDP 以太网协议、高速 SerDes、DDR3/4 等接口。</p></article><article class="advantage"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><p>熟悉 FPGA 资源优化与时序约束，包括 LUT、BRAM、DSP 等资源的高效利用。</p></article><article class="advantage"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg><p>具备技术开发和创新能力，已授权专利 4 项，审核中专利 2 项。</p></article></div></section><section class="section projects" id="projects"><div class="section-heading"><p>项目经历</p><h2>从高速视频链路到 LED 控制卡量产</h2><span>突出项目角色、工程问题、关键动作、量化结果和技术栈。</span></div><div class="project-list"><article class="project-card"><div class="project-index">01</div><div class="project-body"><div class="project-head"><div><h3>基于 FPGA 的光纤接口输入 HDMI 输出盒</h3><p>项目负责人 / FPGA 工程师 · 2024.02 - 2024.08</p></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-network"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg></div><p class="project-summary">HDMI 输出盒接收前端设备的显示数据包，将数据包内容结合位置信息组织成 HDMI 输出视频流，用于测试前端控制器支持布局的完备性，并用于客户实时预览布局结果。</p><ul><li>设计产品原理图并审核 PCB 布局，主导硬件选型与架构设计。</li><li>设计 ARM MCU 程序，移植 HDMI 芯片参考代码，配置 FPGA 被动加载。</li><li>开发 FPGA 数据处理模块和光纤接收转发模块，采用 4K 视频数据 DDR 缓存策略，支持 4K 分辨率动态布局显示。</li><li>BRAM 占用率降低至 90% 以下；领导 3 人团队完成项目交付，资源利用率优化至 LUT 37%、BRAM 90%。</li></ul><div class="stack"><span>Xilinx Artix-7 XC7A75T</span><span>GSV2011 HDMI 编解码芯片</span><span>ARM MCU</span><span>DDR 缓存</span></div></div></article><article class="project-card"><div class="project-index">02</div><div class="project-body"><div class="project-head"><div><h3>Ethernet 视频数据输入的 LED 屏控制卡</h3><p>项目负责人 / FPGA 工程师 · 2023.03 - 2023.08</p></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-network"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg></div><p class="project-summary">为解决原扫描卡逻辑兼容性不够、仅支持固定芯片级联规则和新驱动芯片支持不足的问题，优化芯片控制模块和显示数据 SDRAM 控制模块，提高兼容性。</p><ul><li>负责项目流程管控和 3 人团队工作管理。</li><li>移植 FPGA 逻辑到新的 FPGA 硬件，重新设计 SDRAM 控制模块和 LED 驱动芯片控制时序模块。</li><li>MCU 侧优化文件系统管理、网络控制协议解析、控制时序参数计算，提高性能和兼容性。</li><li>基于 Python 开发自动化固件配置工具，生成不同 LED 模组的驱动参数数据库。</li><li>新扫描卡在 -40℃~75℃ 高低温环境下无网络误码，年出货量 100K+，应用于京港澳高速、华为 LED 会议一体机等高可靠场景。</li><li>相关专利“LED显示屏控制卡及LED显示屏灯板控制方法”已获授权，专利号 CN118918831A。</li></ul><div class="stack"><span>安路 EG4S20BG256</span><span>Ethernet 协议</span><span>时序约束</span><span>时序与资源优化</span><span>Python</span></div></div></article><article class="project-card"><div class="project-index">03</div><div class="project-body"><div class="project-head"><div><h3>方案计算软件的上位机驱动程序开发</h3><p>FPGA 开发 · 2023.04 - 2023.08</p></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-network"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg></div><p class="project-summary">过往支持多种驱动芯片的 FPGA 逻辑需要大量参数控制，需要精确计算时序参数，并整合为动态链接库供上位软件调用。</p><ul><li>开发 C++ 动态链接库（DLL），解析配置文件与 UI 参数，精准生成驱动芯片时序参数。</li><li>熟悉 Windows 文件 I/O，实现参数计算与接口标准化，支持多芯片兼容。</li><li>提升 FPGA 参数配置与上位机联调效率。</li></ul><div class="stack"><span>C++</span><span>Windows API</span><span>动态链接库 DLL</span></div></div></article></div></section><section class="section experience" id="experience"><div class="section-heading"><p>工作经历</p><h2>高可靠显示与光电装备方向的 FPGA 开发经验</h2><span>工作经历保留原简历中的公司背景、职责和成果。</span></div><div class="timeline"><article class="timeline-item"><div class="timeline-date">2020.03 - 至今</div><div class="timeline-card"><div class="job-title"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg><div><h3>上海三思电子工程有限公司</h3><p>FPGA 开发</p></div></div><p class="company-intro">专注于 LED 显示和照明技术的国家高科技企业、工信部专精特新重点小巨人企业，产品应用于美国纽约时代广场、港珠澳大桥等大型标志性工程，行销全国并出口 30 多个国家。</p><ul><li>参与公司专利技术开发，主导开发 2 个应用于 LED 显示屏的图像处理技术，其中之一效果超过三星同功能效果。</li><li>参与的 6 项技术完成专利申请，其中 4 项已授权。</li><li>主导开发 3 款基于 FPGA 的控制器，功能涉及以太网协议解析、光纤高速信号处理、图像处理等。</li><li>升级和维护已有控制器产品，单品年销量约 100K。</li></ul></div></article><article class="timeline-item"><div class="timeline-date">2017.07 - 2018.10</div><div class="timeline-card"><div class="job-title"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg><div><h3>武汉博宇光电系统有限责任公司</h3><p>FPGA 开发</p></div></div><p class="company-intro">专注于光电装备研发、生产和销售的高新技术企业，具备武器装备科研生产单位二级保密资格、武器装备科研生产许可、装备承制单位资格。</p><ul><li>负责基于 NIOS2 软核处理器硬件系统驱动的 VGA 显示器开发，已研发成功并投入小批量试产。</li></ul></div></article></div></section><section class="section section-dark" id="skills"><div class="section-heading"><p>技能栈</p><h2>RTL、仿真、接口、资源与时序优化</h2><span>技能呈现按简历原文拆分为可快速扫描的工程能力矩阵。</span></div><div class="skill-grid"><article class="skill-card"><h3>HDL / 编程</h3><div><span>Verilog</span><span>SystemVerilog</span><span>Python</span><span>C/C++</span><span>SpinalHDL</span></div></article><article class="skill-card"><h3>仿真验证</h3><div><span>ModelSim</span><span>Vivado Simulator</span><span>VCS</span><span>QuestaSim</span></div></article><article class="skill-card"><h3>FPGA 平台</h3><div><span>Xilinx</span><span>Altera</span><span>安路</span><span>复旦微</span><span>Artix-7</span></div></article><article class="skill-card"><h3>接口与系统</h3><div><span>TCP/UDP Ethernet</span><span>高速 SerDes</span><span>DDR3/4</span><span>HDMI</span><span>SDRAM</span></div></article><article class="skill-card"><h3>工程优化</h3><div><span>时序约束</span><span>LUT/BRAM/DSP 资源优化</span><span>控制器升级维护</span><span>硬件选型与架构设计</span></div></article></div></section><section class="section honors" id="honors"><div class="section-heading"><p>专利与荣誉</p><h2>技术创新与持续绩效记录</h2><span>简历中的专利、奖励和语言能力集中展示。</span></div><div class="honors-layout"><article class="patents"><h3><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>专利著作</h3><ol><li>LED显示屏控制卡及LED显示屏灯板控制方法（CN118918831A）</li><li>自动调整显示的LED显示屏控制装置（CN222213711U）</li><li>一种基于偏移表的图像抖动方法（CN117372298A）</li><li>基于脉冲宽度调制的显示屏灰度精度提升方法、装置、终端及存储介质（CN118072658A）</li></ol><p>另有申请中专利 2 个。</p></article><article class="awards"><h3><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>荣誉奖励</h3><p><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-medal"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"></path><path d="M11 12 5.12 2.2"></path><path d="m13 12 5.88-9.8"></path><path d="M8 7h8"></path><circle cx="12" cy="17" r="5"></circle><path d="M12 18v-2h-.5"></path></svg>连续 3 年获得公司年度最高奖金奖励（3万元）</p><p><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-medal"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"></path><path d="M11 12 5.12 2.2"></path><path d="m13 12 5.88-9.8"></path><path d="M8 7h8"></path><circle cx="12" cy="17" r="5"></circle><path d="M12 18v-2h-.5"></path></svg>连续 3 年荣获公司绮定新人奖（2021年 - 2023年）</p><p><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-medal"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"></path><path d="M11 12 5.12 2.2"></path><path d="m13 12 5.88-9.8"></path><path d="M8 7h8"></path><circle cx="12" cy="17" r="5"></circle><path d="M12 18v-2h-.5"></path></svg>2024 年荣获公司技术贡献奖</p><p><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-medal"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"></path><path d="M11 12 5.12 2.2"></path><path d="m13 12 5.88-9.8"></path><path d="M8 7h8"></path><circle cx="12" cy="17" r="5"></circle><path d="M12 18v-2h-.5"></path></svg>CET-6，熟练阅读英文资料和文献</p></article></div></section></main><footer class="contact" id="contact"><div class="edu-card"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg><div><h2>教育背景</h2><p>2013.09 - 2017.06 · 华中科技大学 / 光电信息科学与工程 / 本科</p></div></div><div class="contact-card"><h2>联系我</h2><a href="mailto:lvshuocong@outlook.com"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>lvshuocong@outlook.com</a><a href="tel:15821171910"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>15821171910</a><span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>意向城市：上海</span></div></footer></div>
+  </body>
+</html>

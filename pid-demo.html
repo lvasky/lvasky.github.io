@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>增量式 PID 在线演示</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#121a2f;
+      --panel2:#0f172a;
+      --line:#2a3553;
+      --text:#e8eefc;
+      --muted:#9fb0d0;
+      --accent:#6ea8fe;
+      --good:#70d6a6;
+      --warn:#ffd166;
+      --danger:#ff7b7b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+      background:linear-gradient(180deg,#08101e,#0b1020 35%,#0a0f1b); color:var(--text);
+    }
+    .wrap{max-width:1450px;margin:0 auto;padding:22px}
+    h1{margin:0 0 6px;font-size:28px}
+    .sub{color:var(--muted);margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:16px}
+    .card{background:rgba(18,26,47,.95);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+    .controls{display:grid;gap:13px}
+    .row{display:grid;grid-template-columns:92px 1fr 74px;align-items:center;gap:9px}
+    label{font-size:14px;color:#dbe6ff}
+    input[type=range]{width:100%}
+    input[type=number], select{
+      width:100%;background:#0b1326;border:1px solid #34415f;color:var(--text);
+      border-radius:9px;padding:8px 9px;outline:none;
+    }
+    .full{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    button{
+      border:1px solid #3d4b6a;background:#17233d;color:var(--text);padding:10px 12px;
+      border-radius:10px;cursor:pointer;font-weight:650
+    }
+    button:hover{filter:brightness(1.12)}
+    button.primary{background:#2557a7;border-color:#3975d6}
+    button.danger{background:#49212b;border-color:#7d3948}
+    .mode{
+      display:grid;grid-template-columns:1fr 1fr;gap:7px;background:#0b1326;padding:5px;border-radius:12px;border:1px solid #2d3957
+    }
+    .mode button{padding:9px;background:transparent;border-color:transparent}
+    .mode button.active{background:#24385f;border-color:#3d5f98}
+    .formula{
+      margin-top:12px;background:#0a1222;border:1px dashed #34415f;border-radius:12px;padding:12px;
+      color:#cad8f4;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.65
+    }
+    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
+    .stat{background:#0c1427;border:1px solid #293653;border-radius:12px;padding:10px}
+    .stat .k{color:var(--muted);font-size:12px}.stat .v{font-size:20px;font-weight:750;margin-top:3px}
+    .canvasWrap{height:460px;position:relative}
+    canvas{width:100%;height:100%;background:#08101f;border:1px solid #263451;border-radius:13px}
+    .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;color:var(--muted);font-size:13px}
+    .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+    .dot.sp{background:#ffd166}.dot.pv{background:#6ea8fe}.dot.u{background:#70d6a6}.dot.du{background:#ff7b7b}
+    .info{margin-top:12px;color:var(--muted);font-size:13px;line-height:1.6}
+    .sectionTitle{font-size:15px;font-weight:750;margin:3px 0 10px}
+    @media(max-width:950px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.canvasWrap{height:360px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>增量式 PID 在线演示</h1>
+  <div class="sub">模拟一阶惯性对象：改变 PID 参数，观察设定值、实际值、控制输出与 Δu 的实时变化。</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="sectionTitle">PID 模式</div>
+      <div class="mode">
+        <button id="incBtn" class="active">增量式 PID</button>
+        <button id="posBtn">位置式 PID</button>
+      </div>
+
+      <div class="controls" style="margin-top:14px">
+        <div class="row">
+          <label>Kp</label>
+          <input id="kpR" type="range" min="0" max="8" step="0.01" value="1.60">
+          <input id="kp" type="number" min="0" max="20" step="0.01" value="1.60">
+        </div>
+        <div class="row">
+          <label>Ki</label>
+          <input id="kiR" type="range" min="0" max="4" step="0.01" value="0.60">
+          <input id="ki" type="number" min="0" max="20" step="0.01" value="0.60">
+        </div>
+        <div class="row">
+          <label>Kd</label>
+          <input id="kdR" type="range" min="0" max="3" step="0.01" value="0.08">
+          <input id="kd" type="number" min="0" max="20" step="0.01" value="0.08">
+        </div>
+        <div class="row">
+          <label>设定值 SP</label>
+          <input id="spR" type="range" min="-20" max="100" step="1" value="60">
+          <input id="sp" type="number" min="-100" max="200" step="1" value="60">
+        </div>
+        <div class="row">
+          <label>采样周期</label>
+          <input id="dtR" type="range" min="0.02" max="0.5" step="0.01" value="0.10">
+          <input id="dt" type="number" min="0.01" max="2" step="0.01" value="0.10">
+        </div>
+        <div class="row">
+          <label>对象惯性 τ</label>
+          <input id="tauR" type="range" min="0.2" max="8" step="0.1" value="2.0">
+          <input id="tau" type="number" min="0.1" max="20" step="0.1" value="2.0">
+        </div>
+        <div class="row">
+          <label>对象增益 K</label>
+          <input id="gainR" type="range" min="0.1" max="3" step="0.05" value="1.0">
+          <input id="gain" type="number" min="0.01" max="10" step="0.05" value="1.0">
+        </div>
+        <div class="row">
+          <label>输出限幅</label>
+          <input id="limR" type="range" min="10" max="200" step="5" value="100">
+          <input id="lim" type="number" min="1" max="1000" step="5" value="100">
+        </div>
+
+        <div class="full">
+          <button id="startBtn" class="primary">▶ 启动</button>
+          <button id="pauseBtn">Ⅱ 暂停</button>
+          <button id="stepBtn">单步运行</button>
+          <button id="resetBtn" class="danger">↺ 复位</button>
+        </div>
+      </div>
+
+      <div class="formula" id="formula">
+Δu(k) = Kp[e(k)-e(k-1)]
+      + Ki·dt·e(k)
+      + Kd/dt·[e(k)-2e(k-1)+e(k-2)]
+
+u(k) = u(k-1) + Δu(k)
+      </div>
+      <div class="info">
+        被控对象采用一阶惯性模型：<b>dy/dt = (K·u - y)/τ</b>。<br>
+        这个页面重点演示算法差异，不代表某一真实电机或温控系统的精确模型。
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="stats">
+        <div class="stat"><div class="k">时间</div><div class="v" id="sTime">0.00 s</div></div>
+        <div class="stat"><div class="k">误差 e(k)</div><div class="v" id="sErr">0.00</div></div>
+        <div class="stat"><div class="k">实际值 PV</div><div class="v" id="sPv">0.00</div></div>
+        <div class="stat"><div class="k">控制量 u(k)</div><div class="v" id="sU">0.00</div></div>
+        <div class="stat"><div class="k">增量 Δu</div><div class="v" id="sDu">0.00</div></div>
+      </div>
+
+      <div class="canvasWrap"><canvas id="chart"></canvas></div>
+      <div class="legend">
+        <span><i class="dot sp"></i>设定值 SP</span>
+        <span><i class="dot pv"></i>实际值 PV</span>
+        <span><i class="dot u"></i>控制输出 u</span>
+        <span><i class="dot du"></i>Δu（缩放显示）</span>
+      </div>
+      <div class="info">
+        提示：先保持默认参数启动，再逐渐提高 Kp，观察响应速度与振荡；提高 Ki 可减小稳态误差，但过大会引起振荡；Kd 可抑制快速变化。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let mode = 'inc';
+let running = false;
+let timer = null;
+
+let t=0, y=0, u=0, du=0;
+let e0=0, e1=0, e2=0;
+let integral=0;
+
+const hist = {t:[],sp:[],pv:[],u:[],du:[]};
+const MAXPTS = 500;
+
+function num(id){ return parseFloat($(id).value) || 0; }
+function clamp(x,a,b){ return Math.max(a, Math.min(b,x)); }
+
+function link(rangeId, numberId){
+  const r=$(rangeId), n=$(numberId);
+  r.oninput=()=>{n.value=r.value; draw();}
+  n.oninput=()=>{
+    let v=parseFloat(n.value);
+    if(Number.isFinite(v)){
+      if(v>=parseFloat(r.min) && v<=parseFloat(r.max)) r.value=v;
+    }
+    draw();
+  };
+}
+[
+  ['kpR','kp'],['kiR','ki'],['kdR','kd'],['spR','sp'],
+  ['dtR','dt'],['tauR','tau'],['gainR','gain'],['limR','lim']
+].forEach(x=>link(...x));
+
+$('incBtn').onclick=()=>setMode('inc');
+$('posBtn').onclick=()=>setMode('pos');
+
+function setMode(m){
+  mode=m;
+  $('incBtn').classList.toggle('active',m==='inc');
+  $('posBtn').classList.toggle('active',m==='pos');
+  $('formula').textContent = m==='inc'
+? `Δu(k) = Kp[e(k)-e(k-1)]
+      + Ki·dt·e(k)
+      + Kd/dt·[e(k)-2e(k-1)+e(k-2)]
+
+u(k) = u(k-1) + Δu(k)`
+: `u(k) = Kp·e(k)
+     + Ki·∑e(k)·dt
+     + Kd·[e(k)-e(k-1)]/dt
+
+Δu(k) = u(k)-u(k-1)`;
+  reset();
+}
+
+function controlStep(){
+  const kp=num('kp'), ki=num('ki'), kd=num('kd');
+  const sp=num('sp'), dt=Math.max(0.001,num('dt'));
+  const tau=Math.max(0.01,num('tau')), gain=num('gain');
+  const lim=Math.max(0.01,num('lim'));
+
+  e0 = sp-y;
+  const oldU = u;
+
+  if(mode==='inc'){
+    du = kp*(e0-e1) + ki*dt*e0 + kd/dt*(e0-2*e1+e2);
+    u = clamp(u+du, -lim, lim);
+    du = u-oldU;
+  } else {
+    integral += e0*dt;
+    const derivative = (e0-e1)/dt;
+    u = clamp(kp*e0 + ki*integral + kd*derivative, -lim, lim);
+    du = u-oldU;
+    // 简单 anti-windup
+    if(Math.abs(u)>=lim && Math.sign(e0)===Math.sign(u)) integral -= e0*dt;
+  }
+
+  // 一阶惯性对象，Euler 离散
+  y += ((gain*u)-y)/tau * dt;
+  t += dt;
+
+  e2=e1; e1=e0;
+
+  hist.t.push(t); hist.sp.push(sp); hist.pv.push(y); hist.u.push(u); hist.du.push(du);
+  Object.keys(hist).forEach(k=>{ if(hist[k].length>MAXPTS) hist[k].shift(); });
+
+  updateStats();
+  draw();
+}
+
+function updateStats(){
+  $('sTime').textContent=t.toFixed(2)+' s';
+  $('sErr').textContent=e0.toFixed(2);
+  $('sPv').textContent=y.toFixed(2);
+  $('sU').textContent=u.toFixed(2);
+  $('sDu').textContent=du.toFixed(2);
+}
+
+function start(){
+  running=true;
+  if(timer) clearInterval(timer);
+  timer=setInterval(()=>{ if(running) controlStep(); }, 40);
+}
+function pause(){ running=false; }
+function reset(){
+  running=false;
+  if(timer){ clearInterval(timer); timer=null; }
+  t=0;y=0;u=0;du=0;e0=0;e1=0;e2=0;integral=0;
+  Object.keys(hist).forEach(k=>hist[k]=[]);
+  updateStats(); draw();
+}
+$('startBtn').onclick=start;
+$('pauseBtn').onclick=pause;
+$('stepBtn').onclick=()=>{ pause(); controlStep(); };
+$('resetBtn').onclick=reset;
+
+const canvas=$('chart');
+const ctx=canvas.getContext('2d');
+
+function resize(){
+  const dpr=window.devicePixelRatio||1;
+  const rect=canvas.getBoundingClientRect();
+  canvas.width=Math.round(rect.width*dpr);
+  canvas.height=Math.round(rect.height*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
+}
+window.addEventListener('resize',resize);
+
+function draw(){
+  const W=canvas.clientWidth, H=canvas.clientHeight;
+  ctx.clearRect(0,0,W,H);
+
+  const pad={l:52,r:20,t:20,b:34};
+  const cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+
+  const lim=Math.max(10,num('lim'));
+  const sp=Math.abs(num('sp'));
+  let maxAbs=Math.max(lim,sp,20);
+  for(const arrName of ['pv','u']){
+    for(const v of hist[arrName]) maxAbs=Math.max(maxAbs,Math.abs(v));
+  }
+  maxAbs*=1.15;
+  const ymin=-maxAbs, ymax=maxAbs;
+
+  ctx.strokeStyle='#23314d'; ctx.lineWidth=1;
+  ctx.fillStyle='#8292b3'; ctx.font='12px system-ui';
+
+  for(let i=0;i<=8;i++){
+    const yy=pad.t+ch*i/8;
+    ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();
+    const val=ymax-(ymax-ymin)*i/8;
+    ctx.fillText(val.toFixed(0),6,yy+4);
+  }
+  for(let i=0;i<=10;i++){
+    const xx=pad.l+cw*i/10;
+    ctx.beginPath();ctx.moveTo(xx,pad.t);ctx.lineTo(xx,H-pad.b);ctx.stroke();
+  }
+
+  ctx.strokeStyle='#667896';
+  ctx.beginPath();
+  const zeroY=pad.t+(ymax/(ymax-ymin))*ch;
+  ctx.moveTo(pad.l,zeroY);ctx.lineTo(W-pad.r,zeroY);ctx.stroke();
+
+  const n=hist.t.length;
+  const tMin=n?hist.t[0]:0, tMax=n?Math.max(hist.t[n-1],10):10;
+  function X(tt){return pad.l+(tt-tMin)/(tMax-tMin||1)*cw}
+  function Y(v){return pad.t+(ymax-v)/(ymax-ymin)*ch}
+
+  function line(arr, color, scale=1){
+    if(arr.length<2) return;
+    ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath();
+    arr.forEach((v,i)=>{
+      const x=X(hist.t[i]), yy=Y(v*scale);
+      if(i===0)ctx.moveTo(x,yy); else ctx.lineTo(x,yy);
+    });
+    ctx.stroke();
+  }
+
+  line(hist.sp,'#ffd166');
+  line(hist.pv,'#6ea8fe');
+  line(hist.u,'#70d6a6');
+  line(hist.du,'#ff7b7b',0.5);
+
+  ctx.fillStyle='#8292b3';
+  ctx.fillText(tMin.toFixed(1)+'s',pad.l,H-10);
+  ctx.fillText(tMax.toFixed(1)+'s',W-pad.r-36,H-10);
+
+  if(n===0){
+    ctx.fillStyle='#aab8d4';ctx.font='16px system-ui';
+    ctx.textAlign='center';
+    ctx.fillText('点击“启动”开始仿真',W/2,H/2);
+    ctx.textAlign='left';
+  }
+}
+
+resize();
+updateStats();
+</script>
+</body>
+</html>
